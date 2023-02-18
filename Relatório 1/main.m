@@ -12,6 +12,9 @@ mi_Terra = 3.986*(10^5); %km3/s2
 %item a
 disp('Item A')
 
+theta_a = converter_anomalia_media_verdadeira(deg2rad(16.8767), 0.6489050);
+disp(theta_a);
+
 [semieixo_a, n_a] = semieixoMaior(mi_Terra, 2.4509);
 
 %Coordenada Orbital
@@ -77,16 +80,14 @@ set(body, 'FaceColor', 'texturemap', 'CData', cdata, 'EdgeColor', 'none');
 %solucao analitica pontos
 semieixo = semieixo_a;
 ex = 0.6489050;
-for theta=0:1:360
+for theta=0:0.005:deg2rad(360)
     p = semieixo*(1 - ex^2);
     r = p/(1+ex*cos(theta));
     xo = r*cos(theta);
     yo = r*sin(theta);
     zo = 0;
     coordInercial = matrizTranspostaRotacao(deg2rad(64.2707), deg2rad(281.4937), deg2rad(228.5762)) * [xo; yo; zo];
-    plot3(coordInercial(1,1), coordInercial(2,1), coordInercial(3,1), 'MarkerSize', 20)
-    
+    scatter3(coordInercial(1,1), coordInercial(2,1), coordInercial(3,1), '.','red')
 end
-
 
 hold off
