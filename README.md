@@ -1,1 +1,1 @@
-#Laboratório de Guiagem Navegação e Controle
+Laboratório de Guiagem Navegação e Controle
