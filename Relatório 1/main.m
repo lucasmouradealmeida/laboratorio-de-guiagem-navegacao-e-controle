@@ -10,21 +10,18 @@ mi_Terra = 3.986*(10^5); %km3/s2
 
 %Semieixo maior
 %item a
-disp('Item A')
-
 theta_a = converter_anomalia_media_verdadeira(deg2rad(16.8767), 0.6489050);
-disp(theta_a);
 
 [semieixo_a, n_a] = semieixoMaior(mi_Terra, 2.4509);
 
 %Coordenada Orbital
-[xo_a, yo_a, zo_a] = dirOrbital(deg2rad(16.8767), 0.6489050, semieixo_a);
+[xo_a, yo_a, zo_a] = dirOrbital(deg2rad(theta_a), 0.6489050, semieixo_a);
 
 %Coordenada Inercial
 coordInercial_a = matrizTranspostaRotacao(deg2rad(64.2707), deg2rad(281.4937), deg2rad(228.5762)) * [xo_a; yo_a; zo_a];
 
 %Velocidade Orbital
-[vx_a, vy_a, vz_a] = velOrbital(n_a, 0.6489, deg2rad(16.8767),semieixo_a);
+[vx_a, vy_a, vz_a] = velOrbital(n_a, 0.6489, deg2rad(theta_a),semieixo_a);
 
 %Velocidade Inercial
 velocidadeInercial_a = matrizTranspostaRotacao(deg2rad(64.2707), deg2rad(281.4937), deg2rad(228.5762)) * [vx_a; vy_a; vz_a];
@@ -32,13 +29,16 @@ velocidadeInercial_a = matrizTranspostaRotacao(deg2rad(64.2707), deg2rad(281.493
 %--------------------------------------------------------
 
 %item b
-disp('Item B')
+theta_b = converter_anomalia_media_verdadeira(deg2rad(357.1212),0.0014515);
+
 [semieixo_b, n_b] = semieixoMaior(mi_Terra, 1.0036);
-[xo_b, yo_b, zo_b] = dirOrbital(deg2rad(357.1212), 0.0014515, semieixo_b);
 
-coordInercial_b = matrizTranspostaRotacao(deg2rad(0.7404), deg2rad(234.9766), deg2rad(32.0789)) * [xo_a; yo_a; zo_a];
+[xo_b, yo_b, zo_b] = dirOrbital(deg2rad(theta_b), 0.0014515, semieixo_b);
 
-[vx_b, vy_b, vz_b] = velOrbital(n_b, 0.0014515, deg2rad(357.1212), semieixo_b);
+coordInercial_b = matrizTranspostaRotacao(deg2rad(0.7404), deg2rad(234.9766), deg2rad(32.0789)) * [xo_b; yo_b; zo_b];
+
+[vx_b, vy_b, vz_b] = velOrbital(n_b, 0.0014515, deg2rad(theta_b), semieixo_b);
+
 velocidadeInercial_b = matrizTranspostaRotacao(deg2rad(0.7404), deg2rad(234.9766), deg2rad(32.0789)) * [vx_b; vy_b; vz_b];
 
 %-----------------------------------------------------------------
@@ -49,6 +49,11 @@ velocidadeInercial_b = matrizTranspostaRotacao(deg2rad(0.7404), deg2rad(234.9766
 T_a = 2*pi/n_a;
 r_a = coordInercial_a';
 v_a = velocidadeInercial_a';
+
+%Item b
+T_b = 2*pi/n_b;
+r_b = coordInercial_b';
+v_b = velocidadeInercial_b';
 
 %Plot do Elipsoide De referencia
 r_pol = 6356.752; %Raio polar
@@ -63,11 +68,14 @@ axis equal
 hold on 
 
 InitCond = [r_a v_a];
+InitCond2 = [r_b v_b];
 
 [Times,Out] = ode45(@edos, [0 T_a], InitCond);
+[Times2,Out2] = ode45(@edos, [0 T_b], InitCond2);
 
 %Plot do grafico
 p = plot3(Out(:,1),Out(:,2),Out(:,3));
+p2 = plot3(Out2(:,1),Out2(:,2),Out2(:,3));
 
 axis equal
 grid on
@@ -79,14 +87,27 @@ set(body, 'FaceColor', 'texturemap', 'CData', cdata, 'EdgeColor', 'none');
 
 %solucao analitica pontos
 semieixo = semieixo_a;
+semieixo2 = semieixo_b;
 ex = 0.6489050;
-for theta=0:0.005:deg2rad(360)
+ex2 = 0.0014515;
+
+for theta=0:0.07:deg2rad(360)
     p = semieixo*(1 - ex^2);
     r = p/(1+ex*cos(theta));
     xo = r*cos(theta);
     yo = r*sin(theta);
     zo = 0;
     coordInercial = matrizTranspostaRotacao(deg2rad(64.2707), deg2rad(281.4937), deg2rad(228.5762)) * [xo; yo; zo];
+    scatter3(coordInercial(1,1), coordInercial(2,1), coordInercial(3,1), '.','red')
+end
+
+for theta=0:0.07:deg2rad(360)
+    p = semieixo2*(1 - ex2^2);
+    r = p/(1+ex2*cos(theta));
+    xo = r*cos(theta);
+    yo = r*sin(theta);
+    zo = 0;
+    coordInercial = matrizTranspostaRotacao(deg2rad(0.7404), deg2rad(234.9766), deg2rad(32.0789)) * [xo; yo; zo];
     scatter3(coordInercial(1,1), coordInercial(2,1), coordInercial(3,1), '.','red')
 end
 
