@@ -5,7 +5,7 @@ mi_Terra = 3.986*(10^5); %km3/s2
 
 %-----------------------------------------------------------
 
-%Resolu??es
+%Resolucoes
 
 %Item a
 %two lines: 2 07276 64.2707 228.5762 6489050 281.4937 16.8767 2.45097347248963
@@ -56,7 +56,7 @@ velocidadeInercial_b = matrizTranspostaRotacao(deg2rad(0.7404), deg2rad(234.9766
 
 
 
-%Aplica??o do processo de integra??o
+%Aplicacaoo do processo de integracao
 %ODE 45
 
 %Dados do Item a
@@ -75,26 +75,41 @@ r_eq = 6378.137; %Raio equatorial
 
 [x, y, z]= ellipsoid(0,0,0, r_eq, r_eq, r_pol);
 
-figure
-body = surf(x,y,z);
-colormap(cool)
-axis equal
+%figure
+%body = surf(x,y,z);
+%colormap(cool)
+%axis equal
 hold on 
 
-%Condi??o inicial do item A
+%Condicao inicial do item A
 InitCond = [r_a v_a];
 
-%Condi??o inicial do item B
+%Condicao inicial do item B
 InitCond2 = [r_b v_b];
 
 %Solucoes ODE45 (Possivel modificar e multiplicar T_a e T_b (quantidade de periodos))
 options = odeset('RelTol',1e-12); %minimizacao do erro 
 
 %Item a:
-[Times,Out] = ode45(@edos, [0 50*T_a], InitCond, options);
+[Times,Out] = ode45(@edos, [0 1*T_a], InitCond);
 
-%Solu??o para o item b
-[Times2,Out2] = ode45(@edos, [0 50*T_b], InitCond2, options);
+%Solucao para o item b
+[Times2,Out2] = ode45(@edos, [0 1*T_b], InitCond2);
+
+N = length(Out2);
+w = 0.00007272; %rad/s
+delta_t = T_b/(N-1);
+
+for i=0:1:(N)
+    r1 = Out2(i,1);
+    r2 = Out2(i,2);
+    r3 = Out2(i,3);
+    lat = asin(r3/(sqrt(r1^2 + r2^2 + r3^2)));
+    disp(lat)
+    long = atan(r2/r1);
+    plot(lat, long)
+end
+
 
 
 %Plot do grafico
@@ -107,11 +122,11 @@ axis equal
 grid on
 
 %Textura da terra no elipsoide (Necessaria uma conexao com a internet)
-texture_url = 'http://www.shadedrelief.com/natural3/images/earth_clouds.jpg';
-cdata = flip(imread(texture_url));
-set(body, 'FaceColor', 'texturemap', 'CData', cdata, 'EdgeColor', 'none');
+%texture_url = 'http://www.shadedrelief.com/natural3/images/earth_clouds.jpg';
+%cdata = flip(imread(texture_url));
+%set(body, 'FaceColor', 'texturemap', 'CData', cdata, 'EdgeColor', 'none');
 
-%Solu??o Anal?tica (Gera??o dos pontos em vermelho)
+%Solucao Anai?tica (Geracao dos pontos em vermelho)
 
 %Dados item A
 semieixo = semieixo_a;
@@ -125,7 +140,7 @@ for theta=0:0.07:deg2rad(360)
     yo = r*sin(theta);
     zo = 0;
     coordInercial = matrizTranspostaRotacao(deg2rad(64.2707), deg2rad(281.4937), deg2rad(228.5762)) * [xo; yo; zo];
-    scatter3(coordInercial(1,1), coordInercial(2,1), coordInercial(3,1), '.','red')
+    %scatter3(coordInercial(1,1), coordInercial(2,1), coordInercial(3,1), '.','red')
 end
 
 %Dados item B
@@ -140,7 +155,10 @@ for theta=0:0.07:deg2rad(360)
     yo = r*sin(theta);
     zo = 0;
     coordInercial = matrizTranspostaRotacao(deg2rad(0.7404), deg2rad(234.9766), deg2rad(32.0789)) * [xo; yo; zo];
-    scatter3(coordInercial(1,1), coordInercial(2,1), coordInercial(3,1), '.','red')
+    %scatter3(coordInercial(1,1), coordInercial(2,1), coordInercial(3,1), '.','red')  
 end
+    
+    
+     
 
 hold off
