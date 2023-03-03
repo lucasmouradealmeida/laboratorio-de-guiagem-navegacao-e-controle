@@ -54,6 +54,8 @@ coordInercial_b = matrizTranspostaRotacao(deg2rad(0.7404), deg2rad(234.9766), de
 %Velocidade Inercial
 velocidadeInercial_b = matrizTranspostaRotacao(deg2rad(0.7404), deg2rad(234.9766), deg2rad(32.0789)) * [vx_b; vy_b; vz_b];
 
+
+
 %Aplicacaoo do processo de integracao
 %ODE 45
 
@@ -67,6 +69,18 @@ T_b = 2*pi/n_b;
 r_b = coordInercial_b';
 v_b = velocidadeInercial_b';
 
+%Plot do Elipsoide De referencia
+r_pol = 6356.752; %Raio polar
+r_eq = 6378.137; %Raio equatorial
+
+[x, y, z]= ellipsoid(0,0,0, r_eq, r_eq, r_pol);
+
+%figure
+%body = surf(x,y,z);
+%colormap(cool)
+%axis equal
+hold on 
+
 %Condicao inicial do item A
 InitCond = [r_a v_a];
 
@@ -77,24 +91,80 @@ InitCond2 = [r_b v_b];
 options = odeset('RelTol',1e-12); %minimizacao do erro 
 
 %Item a:
-[Times,Out] = ode45(@edos, [0 1*T_a], InitCond, options);
+[Times,Out] = ode45(@edos, [0 T_a], InitCond);
 
 %Solucao para o item b
-[Times2,Out2] = ode45(@edos, [0 1*T_b], InitCond2, options);
+[Times2,Out2] = ode45(@edos, [0 T_b], InitCond2);
 
-%N = length(Out2);
-%j = (1:N-1)';
-%w = 0.00007272; %rad/s
-%delta_t = T_b/(N-1);
+N = length(Out2);
+j = (1:N-1)';
+w = 0.00007272; %rad/s
+delta_t = T_b/(N-1);
 
-
-r1 = Out(:,1);
-r2 = Out(:,2);
-r3 = Out(:,3);
+r1 = Out2(:,1);
+r2 = Out2(:,2);
+r3 = Out2(:,3);
 lat = asin(r3./(sqrt(r1.^2 + r2.^2 + r3.^2)));
 long = atan(r2./r1);
+plot(lat, long)
 
-geoplot(rad2deg(lat), rad2deg(long),'.')
+long = atan2(r2,r1);
+lat = atan2(r3,sqrt(r1^2 + r2^2));
+
+long = rad2deg(long);
+lat = rad2deg(lat);
 
 
 
+
+
+%Plot do grafico
+%Plot item a
+p = plot3(Out(:,1),Out(:,2),Out(:,3));
+%Plot item b
+p2 = plot3(Out2(:,1),Out2(:,2),Out2(:,3));
+
+axis equal
+grid on
+
+%Textura da terra no elipsoide (Necessaria uma conexao com a internet)
+%texture_url = 'http://www.shadedrelief.com/natural3/images/earth_clouds.jpg';
+%cdata = flip(imread(texture_url));
+%set(body, 'FaceColor', 'texturemap', 'CData', cdata, 'EdgeColor', 'none');
+
+%Solucao Anai?tica (Geracao dos pontos em vermelho)
+
+%Dados item A
+semieixo = semieixo_a;
+ex = 0.6489050;
+
+%Plot item A
+for theta=0:0.07:deg2rad(360)
+    p = semieixo*(1 - ex^2);
+    r = p/(1+ex*cos(theta));
+    xo = r*cos(theta);
+    yo = r*sin(theta);
+    zo = 0;
+    coordInercial = matrizTranspostaRotacao(deg2rad(64.2707), deg2rad(281.4937), deg2rad(228.5762)) * [xo; yo; zo];
+    %scatter3(coordInercial(1,1), coordInercial(2,1), coordInercial(3,1), '.','red')
+end
+
+%Dados item B
+semieixo2 = semieixo_b;
+ex2 = 0.0014515;
+
+%Plot item B
+for theta=0:0.07:deg2rad(360)
+    p = semieixo2*(1 - ex2^2);
+    r = p/(1+ex2*cos(theta));
+    xo = r*cos(theta);
+    yo = r*sin(theta);
+    zo = 0;
+    coordInercial = matrizTranspostaRotacao(deg2rad(0.7404), deg2rad(234.9766), deg2rad(32.0789)) * [xo; yo; zo];
+    %scatter3(coordInercial(1,1), coordInercial(2,1), coordInercial(3,1), '.','red')  
+end
+    
+    
+     
+
+hold off
