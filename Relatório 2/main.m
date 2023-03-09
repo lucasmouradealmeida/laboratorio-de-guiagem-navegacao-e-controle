@@ -5,8 +5,6 @@ mi_Terra = 3.986*(10^5); %km3/s2
 
 %-----------------------------------------------------------
 
-%Resolucoes
-
 %Item a
 %two lines: 2 07276 64.2707 228.5762 6489050 281.4937 16.8767 2.45097347248963
 
@@ -77,125 +75,14 @@ InitCond2 = [r_b v_b];
 options = odeset('RelTol',1e-12); %minimizacao do erro 
 
 %Item a:
-[Times,Out] = ode45(@edos, [0 5*T_a], InitCond, options);
+[Times,Out] = ode45(@edos, [0 1*T_a], InitCond, options);
 
-%Sistema de tempo
-y = 22;
-m = 6;
-d= 7;
-UT = 0.20*24; %two lines
-J0 = 367*y - fix(((7*(y + (fix((m+9)/12))))/(4))) + fix(275*m/9) + d + 1721013.5  ;
-Dj = J0;
-Sj = (Dj - 2415020)/36525;
-thetag_0 = (((99.6909833 + 36000.7689*Sj + 0.00038708*Sj^2)/360) - fix((99.6909833 + 36000.7689*Sj + 0.00038708*Sj^2)/360)) * 360;
-theta_g = ((thetag_0 + 360.98564724*UT/24)/360 - fix((thetag_0 + 360.98564724*UT/24)/360) ) * 360;
+ground_track(Out,T_a,22,6,7);
 
-N = length(Out);
-w = 0.00007272; %rad/s
-delta_t = T_a/(N-1);
-thetag0 = deg2rad(theta_g);
-theta_long = ones(N,1);
-
-for j=0:(N-1)
-    theta_long(j+1,1) = thetag0 + j*w*delta_t;
-end
-
-r1 = Out(:,1);
-r2 = Out(:,2);
-r3 = Out(:,3);
-lat = rad2deg(asin(r3./(sqrt(r1.^2 + r2.^2 + r3.^2))));
-long = rad2deg(atan(r2./r1)) - rad2deg(theta_long);
-
-%Correção para a tangente
-for i=1:N
-    if r1(i,1) < 0
-        if long (i,1) < 0
-            long(i,1) = (((long(i,1) - 180)/360) - fix(((long(i,1) - 180)/360))) *360;
-        else
-            long(i,1) = ((long(i,1) + 180)/360 - fix((long(i,1) + 180)/360)) *360 ;
-        end
-    end
-end
-
-worldmap('World')
-load coastlines
-plotm(coastlat,coastlon)
-hold on
-
-%Plotar gráfico ground track
-plotm(-lat,long, 'red')
-hold off
-
-
-
-%Solucao para o item b
+%Item b
 [Times2,Out2] = ode45(@edos, [0 1*T_b], InitCond2, options);
 
-%Sistema de tempo
-y = 22;
-m = 6;
-d= 8;
-UT = 0.7*24; %two lines
-J0 = 367*y - fix(((7*(y + (fix((m+9)/12))))/(4))) + fix(275*m/9) + d + 1721013.5  ;
-Dj = J0;
-Sj = (Dj - 2415020)/36525;
-thetag_0 = (((99.6909833 + 36000.7689*Sj + 0.00038708*Sj^2)/360) - fix((99.6909833 + 36000.7689*Sj + 0.00038708*Sj^2)/360)) * 360;
-theta_g = ((thetag_0 + 360.98564724*UT/24)/360 - fix((thetag_0 + 360.98564724*UT/24)/360) ) * 360;
-
-N = length(Out2);
-w = 0.00007272; %rad/s
-delta_t = T_b/(N-1);
-thetag0 = deg2rad(theta_g);
-theta_long = ones(N,1);
-
-for j=0:(N-1)
-    theta_long(j+1,1) = thetag0 + j*w*delta_t;
-end
-
-r1 = Out2(:,1);
-r2 = Out2(:,2);
-r3 = Out2(:,3);
-lat = rad2deg(asin(r3./(sqrt(r1.^2 + r2.^2 + r3.^2))));
-long = rad2deg(atan(r2./r1)) - rad2deg(theta_long);
-
-%Correção para a tangente
-for i=1:N
-    if r1(i,1) < 0
-        if long (i,1) < 0
-            long(i,1) = (((long(i,1) - 180)/360) - fix(((long(i,1) - 180)/360))) *360;
-        else
-            long(i,1) = ((long(i,1) + 180)/360 - fix((long(i,1) + 180)/360)) *360 ;
-        end
-    end
-end
-
-worldmap('World')
-load coastlines
-plotm(coastlat,coastlon)
-hold on
-
-%Plotar gráfico ground track
-plotm(-lat,long, 'red')
-hold off
-
-%correcao de quadrante e theta_g
-%inercial para terrestre por matriz de rotacao em z (theta_g)
-
-%sistema de tempo
-%Tempo Solar (24h)
-%Tempo Sideral de Greenwich
-
-%Descreva o problema em termos de suas equações diferenciais em coordenadas
-%cartesianas, sabendo que o twolines é dado por:
-%Condições Iniciais:
-%a)
-%1 07276U 74026A 22158.20205273 .00000124 00000+0 00000+0 0 9995
-%2 07276 64.2707 228.5762 6489050 281.4937 16.8767 2.45097347248963
-%b) 
-%1 02717U 67026A 22159.70244616 -.00000351 00000+0 00000+0 0 9995
-%2 02717 0.7404 32.0789 0014515 234.9766 357.1212 1.00360058109167
-%https://nsidc.org/data/user-resources/help-center/day-year-doy-calendar
-
+ground_track(Out2,T_b,22,6,8);
 
 
 
