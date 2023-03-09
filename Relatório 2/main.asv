@@ -77,10 +77,10 @@ InitCond2 = [r_b v_b];
 options = odeset('RelTol',1e-12); %minimizacao do erro 
 
 %Item a:
-[Times,Out] = ode45(@edos, [0 5*T_a], InitCond, options);
+[Times,Out] = ode45(@edos, [0 1*T_a], InitCond, options);
 
 %Sistema de tempo
-y = 22;
+y = 1970+22;
 m = 6;
 d= 7;
 UT = 0.20*24; %two lines
@@ -132,7 +132,7 @@ hold off
 [Times2,Out2] = ode45(@edos, [0 1*T_b], InitCond2, options);
 
 %Sistema de tempo
-y = 22;
+y = 1970+22;
 m = 6;
 d= 8;
 UT = 0.7*24; %two lines
@@ -169,14 +169,14 @@ for i=1:N
     end
 end
 
-worldmap('World')
-load coastlines
-plotm(coastlat,coastlon)
-hold on
+%sworldmap('World')
+%load coastlines
+%plotm(coastlat,coastlon)
+%hold on
 
 %Plotar gráfico ground track
-plotm(-lat,long, 'red')
-hold off
+%plotm(-lat,long, 'red')
+%hold off
 
 %correcao de quadrante e theta_g
 %inercial para terrestre por matriz de rotacao em z (theta_g)
