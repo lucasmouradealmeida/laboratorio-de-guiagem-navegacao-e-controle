@@ -6,9 +6,10 @@ mi_Terra = 3.986*(10^5); %km3/s2
 %-----------------------------------------------------------
 
 %Item a
-%two lines: 2 07276 64.2707 228.5762 6489050 281.4937 16.8767 2.45097347248963
+%two lines: 1 07276U 74026A 22158.20205273 .00000124 00000+0 00000+0 0 9995
+%2 07276 64.2707 228.5762 6489050 281.4937 16.8767 2.45097347248963
 
-%Convers?o da anomalia media para verdadeira
+%Conversao da anomalia media para verdadeira
 %theta_a = 16.8767
 theta_a = converter_anomalia_media_verdadeira(deg2rad(16.8767), 0.6489050);
 
@@ -30,7 +31,8 @@ velocidadeInercial_a = matrizTranspostaRotacao(deg2rad(64.2707), deg2rad(281.493
 %--------------------------------------------------------
 
 %item b
-%two lines: 2 02717 0.7404 32.0789 0014515 234.9766 357.1212 1.00360058109167
+%two lines: 1 02717U 67026A 22159.70244616 -.00000351 00000+0 00000+0 0 9995
+%2 02717 0.7404 32.0789 0014515 234.9766 357.1212 1.00360058109167
 
 %Convers?o da anomalia media para verdadeira
 %theta_b = 357.1212
@@ -85,11 +87,7 @@ ground_track(Out,T_a,22,6,7);
 ground_track(Out2,T_b,22,6,8);
 
 
+%Localização de um ponto
 
-
-
-
-
-
-
+localizacao_ponto(-2.671667, -44.42056, 45, 19,09,05);
 

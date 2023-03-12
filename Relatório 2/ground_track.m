@@ -14,6 +14,7 @@ function [lat, long] = ground_track(Out,T,y,m,d)
     thetag0 = deg2rad(theta_g);
     theta_long = ones(N,1);
     
+    %Obtencao do theta para cada elemento
     for j=0:(N-1)
         theta_long(j+1,1) = thetag0 + j*w*delta_t;
     end
@@ -38,11 +39,11 @@ function [lat, long] = ground_track(Out,T,y,m,d)
     figure
     worldmap('World')
     load coastlines.mat
-    plotm(coastlat,coastlon,"LineWidth",2)
+    plotm(coastlat,coastlon)
     hold on
     
     %Plotar gráfico ground track
-    plotm(lat,long,"LineWidth",2,"Color","r")
+    plotm(lat,long,'LineWidth',2,'Color','r')
     hold off
 
 end
