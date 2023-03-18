@@ -77,7 +77,7 @@ InitCond2 = [r_b v_b];
 options = odeset('RelTol',1e-12); %minimizacao do erro 
 
 %Item a:
-[Times,Out] = ode45(@edos, [0 1*T_a], InitCond, options);
+[Times,Out] = ode45(@edos, [0 5*T_a], InitCond, options);
 
 ground_track(Out,T_a,22,6,7);
 

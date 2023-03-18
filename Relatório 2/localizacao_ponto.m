@@ -39,7 +39,8 @@ function [coord_inercial] = localizacao_ponto(latitude_geod, longitude_geod, H, 
     
     coord_inercial = R_z*[xe; ye; ze];
     
-    scatter3(coord_inercial(1,1),coord_inercial(2,1),coord_inercial(3,1),'filled','MarkerFaceColor',[1 0 0])
+    %scatter3(coord_inercial(1,1),coord_inercial(2,1),coord_inercial(3,1),'filled','MarkerFaceColor',[1 0 0])
+    scatter3(xe,ye,ze,'filled','MarkerFaceColor',[1 0 0])
     hold off
 end
 
