@@ -1,11 +1,11 @@
-%Relatório 3
+%Relat?rio 3
 M = 1.1; %kg
 g_lunar = 1.8; %m/s2
 E = 3.6; %N - empuxo jato
 theta = 0;
 theta1 = 30;
 theta2 = -30;
-%Condições de contorno
+%Condi??es de contorno
 
 %Movimento vertical
 Fx = E*sin(theta);
@@ -22,9 +22,9 @@ ay = (Fy + P)/M;
 %Pouso suave: y = 0; vx e vy = 0 no pouso
 %2 - PFD
 
-%Equação Torricelli
+%Equa??o Torricelli
 %v2 = v02 + 2aS
-%leva em consideração as condicoes de contorno do pouso (y = 0; vy = 0)
+%leva em considera??o as condicoes de contorno do pouso (y = 0; vy = 0)
 %a_pouso = (V0^2)/(2*y);
 
 y = 0:40;
@@ -48,7 +48,7 @@ x = fzero(fun, 2);
 vo_value = - sqrt(((Fy - P)/M)*(2*x));
 t_transf =  (vo_value + 7)/(((Fy1 - P)/M));
 t_red = (0 - vo_value)/((Fy - P)/M);
-tempo_total = t_transf + t_red
+tempo_total = t_transf + t_red;
 
 
 fun2 = @(y) (-7)^2 + 2*(((Fy - P)/M))*(y-18) + ((Fy2 - P)/M)*(2*y);
@@ -56,14 +56,14 @@ x2 = fzero(fun2, 2);
 vo_value2 = - sqrt(((Fy2 - P)/M)*(2*x2));
 t_transf2 =  (vo_value2 + 7)/((Fy - P)/M);
 t_red2 = (0 - vo_value2)/((Fy2 - P)/M);
-tempo_total2 = t_transf2 + t_red2
+tempo_total2 = t_transf2 + t_red2;
 
 %Movimento Horizontal
-
-
-
-
-
+InitCond = [0 18 0 -7];
+options = odeset('RelTol',1e-12); %minimizacao do erro 
+[Times,Out] = ode45(@edos, [0 t_transf], InitCond, options);
+InitCond2 = [0.3892 13.4181 1.1286 -6.2867];
+[Times2,Out2] = ode45(@edos, [t_transf t_transf+t_red], InitCond2, options)
 
 figure(1)
 plot(V0, y, 'red'); %0
@@ -78,7 +78,6 @@ hold off
 %No relatorio colocar estrategias de pouso suave
 
 %Calculo do tempo
-
 
 
 
