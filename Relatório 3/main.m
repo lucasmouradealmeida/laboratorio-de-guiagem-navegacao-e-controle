@@ -61,9 +61,12 @@ tempo_total2 = t_transf2 + t_red2;
 %Movimento Horizontal
 InitCond = [0 18 0 -7];
 options = odeset('RelTol',1e-12); %minimizacao do erro 
-[Times,Out] = ode45(@edos, [0 t_transf], InitCond, options);
+[Times,Out] = ode45(@edos30, [0 t_transf], InitCond, options);
 InitCond2 = [0.3892 13.4181 1.1286 -6.2867];
-[Times2,Out2] = ode45(@edos, [t_transf t_transf+t_red], InitCond2, options)
+[Times2,Out2] = ode45(@edos0, [t_transf t_transf+t_red], InitCond2, options)
+
+%Zerando a velocidade em X para entrar na condição de pouso suave
+
 
 figure(1)
 plot(V0, y, 'red'); %0
