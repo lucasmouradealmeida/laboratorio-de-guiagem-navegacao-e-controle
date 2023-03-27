@@ -62,9 +62,15 @@ tempo_total2 = t_transf2 + t_red2;
 %Sx Sy Vx Vy
 InitCond = [0 18 0 -7];
 options = odeset('RelTol',1e-12); %minimizacao do erro 
-[Times,Out] = ode45(@edos30, [0 t_transf], InitCond, options);
-InitCond2 = [0.3892 13.4181 1.1286 -6.2867];
-[Times2,Out2] = ode45(@edos0, [t_transf tempo_total], InitCond2, options);
+[Times,Out] = ode45(@edos30, [0 t_transf-0.34486], InitCond, options);
+len1 = length(Out);
+InitCond2 = [Out(len1, 1) Out(len1, 2) Out(len1, 3) Out(len1, 4)];
+[TimesX, OutX] = ode45(@edosN30, [t_transf-0.34486 t_transf], InitCond2, options);
+lenX = length(OutX);
+InitCond3 = [OutX(len1, 1) OutX(len1, 2) OutX(len1, 3) OutX(len1, 4)];
+[Times2,Out2] = ode45(@edos0, [t_transf tempo_total], InitCond3, options)
+
+
 
 %Segunda Condição
 %Sx Sy Vx Vy
