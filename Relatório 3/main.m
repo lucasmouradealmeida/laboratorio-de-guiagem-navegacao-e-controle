@@ -68,7 +68,7 @@ InitCond2 = [Out(len1, 1) Out(len1, 2) Out(len1, 3) Out(len1, 4)];
 [TimesX, OutX] = ode45(@edosN30, [t_transf-0.34486 t_transf], InitCond2, options);
 lenX = length(OutX);
 InitCond3 = [OutX(len1, 1) OutX(len1, 2) OutX(len1, 3) OutX(len1, 4)];
-[Times2,Out2] = ode45(@edos0, [t_transf tempo_total], InitCond3, options)
+[Times2,Out2] = ode45(@edos0, [t_transf tempo_total], InitCond3, options);
 
 
 
@@ -77,8 +77,12 @@ InitCond3 = [OutX(len1, 1) OutX(len1, 2) OutX(len1, 3) OutX(len1, 4)];
 InitCond = [0 18 0 -7];
 options = odeset('RelTol',1e-12); %minimizacao do erro 
 [Times3,Out3] = ode45(@edos0, [0 t_transf2], InitCond, options);
-InitCond2 = [0 4.5821 0 -3.0787];
-[Times4,Out4] = ode45(@edos30, [t_transf2 tempo_total2], InitCond2, options);
+len2 = length(Out3);
+InitCond2 = [Out3(len2, 1) Out3(len2, 2) Out3(len2, 3) Out3(len2, 4)];
+[Times4,Out4] = ode45(@edos30, [t_transf2 tempo_total2-1.48835], InitCond2, options);
+len3 = length(Out4);
+InitCond3 = [Out4(len3, 1) Out4(len3, 2) Out4(len3, 3) Out4(len3, 4)];
+[Times5,Out5] = ode45(@edosN30, [tempo_total2-1.48835 tempo_total2], InitCond3, options);
 
 
 figure(1)
