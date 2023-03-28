@@ -99,11 +99,18 @@ h = [p1;p2;p3;p4;p5;p6];
 legend(h,'Pouso suave 0','Pouso suave 30', 'Pouso suave -30','Ponto inicial','Final 0', 'Final 30 ou -30');
 hold off
 
-%Vetores Finais sem correção em X
-x = [Out(:, 1); Out2(:,1)];
-y = [Out(:, 2); Out2(:,2)];
-Vx = [Out(:, 3); Out2(:,3)];
-Vy = [Out(:, 4); Out2(:,4)];
+%Para plotar as condições 1 e 2 somente comentar e descomentar utilizando %
+%Vetores Finais sem correção em X - Condição 1
+%x = [Out(:, 1); Out2(:,1)];
+%y = [Out(:, 2); Out2(:,2)];
+%Vx = [Out(:, 3); Out2(:,3)];
+%Vy = [Out(:, 4); Out2(:,4)];
+
+%Vetores Finais sem correção em X - Condição 2
+x = [Out3(:, 1); Out5(:,1)];
+y = [Out3(:, 2); Out5(:,2)];
+Vx = [Out3(:, 3); Out5(:,3)];
+Vy = [Out3(:, 4); Out5(:,4)];
 
 figure(2)
 plot(x,y);
@@ -124,7 +131,6 @@ figure(5)
 plot(Vy, x);
 xlabel('Velocidade em y')
 ylabel('Coordenadas em x')
-
 
 figure(6)
 plot(Vy, y);
