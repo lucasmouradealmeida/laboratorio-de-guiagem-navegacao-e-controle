@@ -146,12 +146,21 @@ clc
 
 %Colocar  as condições iniciais no formato:
 %h0 = altitude inicial
+h0 = 18;
+%h0 = 50000;
 %v0= velocidade inicial
+v0 = -7;
+%v0 = -150;
 %mass = massa da espaçonave
+mass = 2010.51;
 %fuel = massa do combustível
+fuel = 719.63;
 %g = gravidade lunar
+g = 1.8;
 %k = constante (velocidade relativa dos gases de exaustão com relação à espaçonave)
+k = 636;
 %mu = taxa máxima da variação de massa devido à queima de combustível
+mu = 16.5;
 
 % Calcula a trajetória de pouso:
 [t1, t2, x1_1, x2_1, x1_2, x2_2, x3_2] = landing (h0, v0, mass, fuel, g, k, mu);
@@ -163,6 +172,35 @@ clc
 % x1_2: altitude em função do tempo, após o acionamento     [ altitude = x1_2(t),   t1 <= t <= t2 ]
 % x2_2: velocidade em função do tempo, após o acionamento   [ velocidade = x2_2(t), t1 <= t <= t2 ]
 % x3_2: massa em função do tempo, após o acionamento        [ massa = x3_2(t),      t1 <= t <= t2 ]
+
+%Gráficos dos valores das funções em função do tempo
+
+x1 = 0:t1;
+x2 = t1:t2;
+
+figure(1)
+plot(x1, x1_1(x1))
+hold on
+plot(x2, x1_2(x2))
+xlabel('Tempo')
+ylabel('Altitude')
+hold off
+
+figure(2)
+plot(x1, x2_1(x1))
+hold on
+plot(x2, x2_2(x2))
+xlabel('Tempo')
+ylabel('Velocidade')
+hold off
+
+figure(3)
+plot(x2, x3_2(x2))
+xlabel('Tempo')
+ylabel('Massa')
+
+
+
 
 
 
