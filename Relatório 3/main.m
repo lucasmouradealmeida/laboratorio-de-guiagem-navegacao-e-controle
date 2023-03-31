@@ -139,6 +139,31 @@ ylabel('Coordenadas em y')
 
 
 
+%% Massa Variável
+
+clear all
+clc
+
+%Colocar  as condições iniciais no formato:
+%h0 = altitude inicial
+%v0= velocidade inicial
+%mass = massa da espaçonave
+%fuel = massa do combustível
+%g = gravidade lunar
+%k = constante (velocidade relativa dos gases de exaustão com relação à espaçonave)
+%mu = taxa máxima da variação de massa devido à queima de combustível
+
+% Calcula a trajetória de pouso:
+[t1, t2, x1_1, x2_1, x1_2, x2_2, x3_2] = landing (h0, v0, mass, fuel, g, k, mu);
+% Saídas:
+% t1: tempo do acionamento do motor
+% t2: tempo do pouso
+% x1_1: altitude em função do tempo, antes do acionamento   [ altitude = x1_1(t),   0 <= t <= t1 ]
+% x2_1: velocidade em função do tempo, antes do acionamento [ velocidade = x2_1(t), 0 <= t <= t1 ]
+% x1_2: altitude em função do tempo, após o acionamento     [ altitude = x1_2(t),   t1 <= t <= t2 ]
+% x2_2: velocidade em função do tempo, após o acionamento   [ velocidade = x2_2(t), t1 <= t <= t2 ]
+% x3_2: massa em função do tempo, após o acionamento        [ massa = x3_2(t),      t1 <= t <= t2 ]
+
 
 
 
