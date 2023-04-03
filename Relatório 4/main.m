@@ -58,8 +58,8 @@ GRx = grx + dgx;
 GRy = gry + dgy;
 GRz = grz + dgz;
 
-time = ones(length(auxTime),1);
-for i = 1:1:length(auxTime)
+time = ones(length(data),1);
+for i = 1:1:length(data)
     if i == 1
         time(i, 1) = data(i,10);
     else
@@ -74,6 +74,9 @@ plot(time, ACx, 'black');
 hold on
 plot(time, ACy, 'red');
 plot(time, ACz, 'blue');
+xlabel('Tempo')
+ylabel('Aceleração (g)')
+hold off
 
 %Magnetometro
 figure(2)
@@ -81,6 +84,9 @@ plot(time, MGx, 'black');
 hold on
 plot(time, MGy, 'red');
 plot(time, MGz, 'blue');
+xlabel('Tempo')
+ylabel('Campo magnético (T)')
+hold off
 
 %Giroscopio
 figure(3)
@@ -88,6 +94,10 @@ plot(time, GRx, 'black');
 hold on
 plot(time, GRy, 'red');
 plot(time, GRz, 'blue');
+ylim([-0.8 0.8]);
+xlabel('Tempo')
+ylabel('Giroscópio')
+hold off
 
 %Ajuste dos vetores (Baseados no Giroscopio)
 %Acelerometro
@@ -103,19 +113,42 @@ giroX = GRx;
 giroy = GRy;
 giroz = GRz;
 
-%TRIAD
-%Acelerometro - referencial
+%Triad Algoritmo
+
+%Estudo do algoritmo
+%Acelerometro - referencial - Sun
 %Magnetometro - Dados
 
-t1b = [acelx acely acelz];
-t1i = [0 0 1];
-t2b = [magx magy magz];
-t2i = [1 0 0];
-t3b = t1b * t2b;
+%Inercial
+An = zeros(length(T1b),3);
+Mn = zeros(length(T1b), 3);
+for i=1:length(T1b)
+    An(i, 3) = 1;
+    Mn(i, 1) = 1;
+end
+AMn = An .* Mn;
+
+%Body
+Ab = [acelx acely acelz];
+Mb = [magx magy magz];
+AMb = Ab .* Mb;
 
 
+%Vetores Tb
+T1b = Ab;
+T2b = AMb/norm(AMb);
+T3b = T1b .* T2b;
 
+%Vetores Tn
+T1n = An;
+T2n = AMn;
+T3n = T1n .* T2n;
 
+%Matriz Rotação
+BT = [T1b T2b T3b];
+NT = [T1n T2n T3n];
+
+Rtriad = BT*(NT');
 
 
 
