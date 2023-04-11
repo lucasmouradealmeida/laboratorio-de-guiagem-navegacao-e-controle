@@ -76,6 +76,7 @@ plot(time, ACy, 'red');
 plot(time, ACz, 'blue');
 xlabel('Tempo')
 ylabel('Aceleração (g)')
+legend('X', 'Y', 'Z')
 hold off
 
 %Magnetometro
@@ -86,6 +87,7 @@ plot(time, MGy, 'red');
 plot(time, MGz, 'blue');
 xlabel('Tempo')
 ylabel('Campo magnético (T)')
+legend('X', 'Y', 'Z')
 hold off
 
 %Giroscopio
@@ -96,7 +98,8 @@ plot(time, GRy, 'red');
 plot(time, GRz, 'blue');
 ylim([-0.8 0.8]);
 xlabel('Tempo')
-ylabel('Giroscópio')
+ylabel('Velocidade de rotação')
+legend('X', 'Y', 'Z')
 hold off
 
 %Ajuste dos vetores (Baseados no Giroscopio)
@@ -116,13 +119,13 @@ giroz = GRz;
 %Triad Algoritmo
 
 %Estudo do algoritmo
-%Acelerometro - referencial - Sun
+%Acelerometro - Referencial - Sun
 %Magnetometro - Dados
 
 %Inercial
-An = zeros(length(T1b),3);
-Mn = zeros(length(T1b), 3);
-for i=1:length(T1b)
+An = zeros(length(data),3);
+Mn = zeros(length(data), 3);
+for i=1:length(data)
     An(i, 3) = 1;
     Mn(i, 1) = 1;
 end
@@ -132,7 +135,6 @@ AMn = An .* Mn;
 Ab = [acelx acely acelz];
 Mb = [magx magy magz];
 AMb = Ab .* Mb;
-
 
 %Vetores Tb
 T1b = Ab;
@@ -150,7 +152,11 @@ NT = [T1n T2n T3n];
 
 Rtriad = BT*(NT');
 
-
+%Ajustar erros na função ????
+%Métodos que precisame ser utilizados 
+%Método TRIAD
+%Método de integração por trapézios
+%Método de quatérnion
 
 
 
