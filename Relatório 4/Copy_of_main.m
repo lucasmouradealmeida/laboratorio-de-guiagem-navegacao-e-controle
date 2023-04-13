@@ -1,5 +1,5 @@
 %Import data
-data = importdata('parada.txt');
+data = importdata('90yzx.txt');
 
 %Acelerometro
 acx = data(:,1)/256;
@@ -150,7 +150,7 @@ T3n = cross(T1n, T2n);
 BT = [T1b(1, :); T2b(1, :); T3b(1, :)];
 NT = [T1n(1, :); T2n(1, :); T3n(1, :)];
 
-Rtriad = BT*(NT');
+Rtriad2 = BT*(NT');
 
 
 
