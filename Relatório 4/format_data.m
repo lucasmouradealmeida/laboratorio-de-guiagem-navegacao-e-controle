@@ -114,7 +114,7 @@ girox = GRx;
 giroy = GRy;
 giroz = GRz;
 
-allVec = [acelx acely acelz magx magy magz girox giroy giroz];
+allVec = [acelx acely acelz magx magy magz girox giroy giroz time];
 
 end
 
