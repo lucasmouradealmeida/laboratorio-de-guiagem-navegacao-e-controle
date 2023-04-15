@@ -67,38 +67,38 @@ end
 
 %Plots
 %Acelerometro
-figure(1)
-plot(time, ACx, 'black');
-hold on
-plot(time, ACy, 'red');
-plot(time, ACz, 'blue');
-xlabel('Tempo')
-ylabel('Aceleração (g)')
-legend('X', 'Y', 'Z')
-hold off
+%figure(1)
+% plot(time, ACx, 'black');
+% hold on
+% plot(time, ACy, 'red');
+% plot(time, ACz, 'blue');
+% xlabel('Tempo')
+% ylabel('Aceleração (g)')
+% legend('X', 'Y', 'Z')
+% hold off
 
 %Magnetometro
-figure(2)
-plot(time, MGx, 'black');
-hold on
-plot(time, MGy, 'red');
-plot(time, MGz, 'blue');
-xlabel('Tempo')
-ylabel('Campo magnético (T)')
-legend('X', 'Y', 'Z')
-hold off
+%figure(2)
+% plot(time, MGx, 'black');
+% hold on
+% plot(time, MGy, 'red');
+% plot(time, MGz, 'blue');
+% xlabel('Tempo')
+% ylabel('Campo magnético (T)')
+% legend('X', 'Y', 'Z')
+% hold off
 
 %Giroscopio
-figure(3)
-plot(time, GRx, 'black');
-hold on
-plot(time, GRy, 'red');
-plot(time, GRz, 'blue');
-ylim([-0.8 0.8]);
-xlabel('Tempo')
-ylabel('Velocidade de rotação')
-legend('X', 'Y', 'Z')
-hold off
+%figure(3)
+% plot(time, GRx, 'black');
+% hold on
+% plot(time, GRy, 'red');
+% plot(time, GRz, 'blue');
+% ylim([-0.8 0.8]);
+% xlabel('Tempo')
+% ylabel('Velocidade de rotação')
+% legend('X', 'Y', 'Z')
+% hold off
 
 %Ajuste dos vetores (Baseados no Giroscopio)
 %Acelerometro
