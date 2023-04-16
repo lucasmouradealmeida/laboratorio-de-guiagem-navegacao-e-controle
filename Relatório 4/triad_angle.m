@@ -1,15 +1,8 @@
-function [degBeta, degGama, degAlfa] = triad_angle(triad)
-    %barBB=Rtriad*Rtriad2';
-    %ErrorPhiDeg = acos(0.5*(trace(barBB)-1))*180/pi;
-
-    %Matriz XYZ
-    beta = asin(triad(1,3));
-    gama = asin(triad(1,2)/(-cos(beta)));
-    alfa = acos(triad(3,3)/(cos(beta)));
-
-    degBeta = beta;
-    degGama = gama;
-    degAlfa = alfa;
+function [theta, phi, psi] = triad_angle(triad)
+    %Matriz 123
+    phi = asind(triad(3,1));
+    psi = -asind(triad(3,2)/cosd(phi));
+    theta = -asind(triad(2,1)/cosd(phi));
 
 end
 

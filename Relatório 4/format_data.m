@@ -16,17 +16,17 @@ gry = data(:,8)/(14.375);
 grz = data(:,9)/(14.375);
 
 %Médias do acelerometro
-axmed = median(acx);
-aymed = median(acy);
-azmed = median(acz);
+axmed = mean(acx);
+aymed = mean(acy);
+azmed = mean(acz);
 %Medias do magnetometro
-mgxmed = median(mgx);
-mgymed = median(mgy);
-mgzmed = median(mgz);
+mgxmed = mean(mgx);
+mgymed = mean(mgy);
+mgzmed = mean(mgz);
 %Medias do giroscopio
-grxmed = median(grx);
-grymed = median(gry);
-grzmed = median(grz);
+grxmed = mean(grx);
+grymed = mean(gry);
+grzmed = mean(grz);
 
 %Desvios
 %Acelerometro
