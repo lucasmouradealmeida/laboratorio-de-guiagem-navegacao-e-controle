@@ -59,27 +59,28 @@ plot(time, theta_trapz, 'red')
 hold on
 plot(time, phi_trapz, 'blue')
 plot(time, psi_trapz, 'green')
-hold off
 legend('theta', 'phi', 'psi')
+hold off
+
 
 
 %Plot - Quaternion
-qx = zeros(length(data));
-qy = zeros(length(data));
-qz = zeros(length(data));
+qx = zeros(length(data), 1);
+qy = zeros(length(data), 1);
+qz = zeros(length(data), 1);
 
 for i=1:length(data)
     qx(i) = rad2deg(q(1,1,i));
     qy(i) = rad2deg(q(2,1,i));
     qz(i) = rad2deg(q(3,1,i));
-
 end
 
 figure(3)
-plot(time, qx)
+plot(time, qx, 'red')
 hold on
-plot(time, qy)
-plot(time, qz)
+plot(time, qy, 'blue')
+plot(time, qz, 'green')
+legend('q1', 'q2', 'q3')
 hold off
 
 
