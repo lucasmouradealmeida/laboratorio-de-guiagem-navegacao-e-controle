@@ -1,32 +1,32 @@
-%Dados do Grupo (Parado)
-%parado_grupo = importdata('dados.txt');
-%dados_parado_grupo = format_data(parado_grupo);
-
-%Dados da professora (Parado)
-%parado_prof = importdata('parada.txt');
-%dados_parado_prof = format_data(parado_prof);
-
-%Dado da professora (Movimento)
-mov_prof = importdata('data.txt');
-data = format_data(mov_prof);
-
+%Dados(Em Movimento)
+data = format_data(importdata('data.txt'));
 
 %TRIAD
-angle = zeros(length(mov_prof),3);
+angle = zeros(length(data),3);
+alfa = zeros(length(data),1);
+q4 = zeros(length(data),1);
+v = zeros(1,3,length(data));
+q = zeros(4,1,length(data));
 
-for i=1:length(mov_prof)
+for i=1:length(data)
 
-triad_mov_prof = TRIAD(mov_prof, data(:,1), ...
+triad_mov = TRIAD(data, data(:,1), ...
     data(:,2), data(:,3), ...
     data(:,4), data(:,5), ...
     data(:,6), i);
 
+%Quaternion
+alfa(i) = acosd(0.5*(trace(triad_mov)-1));
+v(:,:,i) = [(triad_mov(2,3)-triad_mov(3,2)) (triad_mov(3,1)-triad_mov(1,3)) (triad_mov(1,2)-triad_mov(2,1))]*sind(alfa(i)/2);
+q4(i) = cosd(alfa(i)/2);
+q(:,:,i) = [v(1,1,i); v(1,2,i); v(1,3,i); q4(i)];
+
 %Determinação angular (TRIAD)
-[angle(i,1), angle(i,2), angle(i,3)] = triad_angle(triad_mov_prof);
+[angle(i,1), angle(i,2), angle(i,3)] = triad_angle(triad_mov);
 
 end
 
-%plot - Variação do ângulo no tempo
+%Plot - Triad
 figure(1)
 plot(data(:,10), angle(:,1), 'red')
 hold on
@@ -34,6 +34,8 @@ plot(data(:,10), angle(:,2), 'blue')
 plot(data(:,10), angle(:,3), 'green')
 legend('theta', 'phi', 'psi')
 hold off
+
+
 
 %Integração por Trapézio
 gx = data(:, 7);
@@ -51,6 +53,7 @@ for i=2:length(time)
     psi_trapz(i) = psi_trapz(i - 1) - trapz([time(i) time(i-1)],[gz(i) gz(i-1)]);
 end
 
+%Plot - Trapézio
 figure(2)
 plot(time, theta_trapz, 'red')
 hold on
@@ -60,8 +63,24 @@ hold off
 legend('theta', 'phi', 'psi')
 
 
-%Quaternion
+%Plot - Quaternion
+qx = zeros(length(data));
+qy = zeros(length(data));
+qz = zeros(length(data));
 
+for i=1:length(data)
+    qx(i) = rad2deg(q(1,1,i));
+    qy(i) = rad2deg(q(2,1,i));
+    qz(i) = rad2deg(q(3,1,i));
+
+end
+
+figure(3)
+plot(time, qx)
+hold on
+plot(time, qy)
+plot(time, qz)
+hold off
 
 
 
