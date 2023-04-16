@@ -7,7 +7,7 @@
 %dados_parado_prof = format_data(parado_prof);
 
 %Dado da professora (Movimento)
-mov_prof = importdata('90yzx.txt');
+mov_prof = importdata('data.txt');
 data = format_data(mov_prof);
 
 
@@ -61,6 +61,7 @@ legend('theta', 'phi', 'psi')
 
 
 %Quaternion
+
 
 
 
