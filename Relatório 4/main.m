@@ -1,5 +1,5 @@
-%Dados(Em Movimento)
-data = format_data(importdata('data.txt'));
+%Dados
+data = format_data(importdata('data_cel.txt'));
 
 %TRIAD
 angle = zeros(length(data),3);
@@ -21,7 +21,7 @@ v(:,:,i) = [(triad_mov(2,3)-triad_mov(3,2)) (triad_mov(3,1)-triad_mov(1,3)) (tri
 q4(i) = cosd(alfa(i)/2);
 q(:,:,i) = [v(1,1,i); v(1,2,i); v(1,3,i); q4(i)];
 
-%Determinação angular (TRIAD)
+%Determinacao angular (TRIAD)
 [angle(i,1), angle(i,2), angle(i,3)] = triad_angle(triad_mov);
 
 end
@@ -33,11 +33,13 @@ hold on
 plot(data(:,10), angle(:,2), 'blue')
 plot(data(:,10), angle(:,3), 'green')
 legend('theta', 'phi', 'psi')
+ylim([-90,90])
+xlabel('Tempo')
+ylabel('AngulaÃ§Ã£o')
 hold off
 
 
-
-%Integração por Trapézio
+%Integracao por Trapezio
 gx = data(:, 7);
 gy = data(:,8);
 gz = data(:,9);
@@ -53,13 +55,16 @@ for i=2:length(time)
     psi_trapz(i) = psi_trapz(i - 1) - trapz([time(i) time(i-1)],[gz(i) gz(i-1)]);
 end
 
-%Plot - Trapézio
+%Plot - Trapezio
 figure(2)
 plot(time, theta_trapz, 'red')
 hold on
 plot(time, phi_trapz, 'blue')
 plot(time, psi_trapz, 'green')
 legend('theta', 'phi', 'psi')
+ylim([-90,90])
+xlabel('Tempo')
+ylabel('AngulaÃ§Ã£o')
 hold off
 
 
@@ -81,14 +86,45 @@ hold on
 plot(time, qy, 'blue')
 plot(time, qz, 'green')
 legend('q1', 'q2', 'q3')
+ylim([-90,90])
+xlabel('Tempo')
+ylabel('AngulaÃ§Ã£o')
 hold off
 
 
+%Plots - Teste de interferencia - Dados obtidos
+%Acelerometro
+figure(4)
+plot(time, data(:,1), 'red')
+hold on
+plot(time, data(:,2), 'blue')
+plot(time, data(:,3), 'green')
+legend('X', 'Y', 'Z')
+ylim([-0.2,1.2])
+xlabel('Tempo [s]')
+ylabel('Gravidade da Terra [g]')
+hold off
 
+%Magnetometro
+figure(5)
+plot(time, data(:,4), 'red')
+hold on
+plot(time, data(:,5), 'blue')
+plot(time, data(:,6), 'green')
+legend('X', 'Y', 'Z')
+ylim([-1.2,0.2])
+xlabel('Tempo [s]')
+ylabel('Tesla [T]')
+hold off
 
-
-
-
-
-
-
+%Giroscopio
+figure(6)
+plot(time, data(:,7), 'red')
+hold on
+plot(time, data(:,8), 'blue')
+plot(time, data(:,9), 'green')
+legend('X', 'Y', 'Z')
+ylim([-0.8,0.8])
+xlabel('Tempo [s]')
+ylabel('Velocidade Angular [rad/s]')
+hold off
