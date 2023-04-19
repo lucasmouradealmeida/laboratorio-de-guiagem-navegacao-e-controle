@@ -1,4 +1,4 @@
-%Dados
+%Dados(Em Movimento)
 data = format_data(importdata('data_cel.txt'));
 
 %TRIAD
@@ -21,7 +21,7 @@ v(:,:,i) = [(triad_mov(2,3)-triad_mov(3,2)) (triad_mov(3,1)-triad_mov(1,3)) (tri
 q4(i) = cosd(alfa(i)/2);
 q(:,:,i) = [v(1,1,i); v(1,2,i); v(1,3,i); q4(i)];
 
-%Determinacao angular (TRIAD)
+%Determina??o angular (TRIAD)
 [angle(i,1), angle(i,2), angle(i,3)] = triad_angle(triad_mov);
 
 end
@@ -34,12 +34,11 @@ plot(data(:,10), angle(:,2), 'blue')
 plot(data(:,10), angle(:,3), 'green')
 legend('theta', 'phi', 'psi')
 ylim([-90,90])
-xlabel('Tempo')
-ylabel('Angulação')
 hold off
 
 
-%Integracao por Trapezio
+
+%Integra??o por Trap?zio
 gx = data(:, 7);
 gy = data(:,8);
 gz = data(:,9);
@@ -55,7 +54,7 @@ for i=2:length(time)
     psi_trapz(i) = psi_trapz(i - 1) - trapz([time(i) time(i-1)],[gz(i) gz(i-1)]);
 end
 
-%Plot - Trapezio
+%Plot - Trap?zio
 figure(2)
 plot(time, theta_trapz, 'red')
 hold on
@@ -63,8 +62,6 @@ plot(time, phi_trapz, 'blue')
 plot(time, psi_trapz, 'green')
 legend('theta', 'phi', 'psi')
 ylim([-90,90])
-xlabel('Tempo')
-ylabel('Angulação')
 hold off
 
 
@@ -87,13 +84,11 @@ plot(time, qy, 'blue')
 plot(time, qz, 'green')
 legend('q1', 'q2', 'q3')
 ylim([-90,90])
-xlabel('Tempo')
-ylabel('Angulação')
 hold off
 
 
-%Plots - Teste de interferencia - Dados obtidos
-%Acelerometro
+%teste interferencia 
+%acelerometro
 figure(4)
 plot(time, data(:,1), 'red')
 hold on
@@ -105,7 +100,7 @@ xlabel('Tempo [s]')
 ylabel('Gravidade da Terra [g]')
 hold off
 
-%Magnetometro
+%magnetometro
 figure(5)
 plot(time, data(:,4), 'red')
 hold on
@@ -117,7 +112,7 @@ xlabel('Tempo [s]')
 ylabel('Tesla [T]')
 hold off
 
-%Giroscopio
+%giroscopio
 figure(6)
 plot(time, data(:,7), 'red')
 hold on
