@@ -1,5 +1,5 @@
-%Dados(Em Movimento)
-data = format_data(importdata('data_cel.txt'));
+%Dados - Modificar input de dados - Movimento / Parado
+data = format_data(importdata('data.txt'));
 
 %TRIAD
 angle = zeros(length(data),3);
@@ -21,7 +21,7 @@ v(:,:,i) = [(triad_mov(2,3)-triad_mov(3,2)) (triad_mov(3,1)-triad_mov(1,3)) (tri
 q4(i) = cosd(alfa(i)/2);
 q(:,:,i) = [v(1,1,i); v(1,2,i); v(1,3,i); q4(i)];
 
-%Determina??o angular (TRIAD)
+%Determinacao angular (TRIAD)
 [angle(i,1), angle(i,2), angle(i,3)] = triad_angle(triad_mov);
 
 end
@@ -54,7 +54,7 @@ for i=2:length(time)
     psi_trapz(i) = psi_trapz(i - 1) - trapz([time(i) time(i-1)],[gz(i) gz(i-1)]);
 end
 
-%Plot - Trap?zio
+%Plot - Trapezio
 figure(2)
 plot(time, theta_trapz, 'red')
 hold on
@@ -123,3 +123,98 @@ ylim([-0.8,0.8])
 xlabel('Tempo [s]')
 ylabel('Velocidade Angular [rad/s]')
 hold off
+
+
+%Estudo de Erro
+figure(7)
+%Triad
+plot(time, angle(:,1))
+hold on
+plot(time, angle(:,2))
+hold on
+plot(time, angle(:,3))
+hold on
+%Trapezio
+plot(time, theta_trapz)
+hold on
+plot(time, phi_trapz)
+hold on
+plot(time, psi_trapz)
+hold on
+%Quaternion
+plot(time, qx)
+hold on
+plot(time, qy)
+hold on
+plot(time, qz)
+legend('theta', 'phi', 'psi', 'theta', 'phi', 'psi', 'q1', 'q2', 'q3')
+ylim([-90,90])
+hold off
+
+%Determinacao dos Erros absolutos - Trapézio - Referencia
+ErrorAbs_theta = zeros(length(time),1);
+ErrorAbs_phi = zeros(length(time),1);
+ErrorAbs_psi = zeros(length(time),1);
+%TRIAD/TRAPEZIO (Theta) 
+for i=1:length(time)
+    if theta_trapz(i,1) ~= 0
+        ErrorAbs_theta(i) = norm(angle(i,1)-theta_trapz(i,1))/norm((theta_trapz(i,1)));
+    end
+end
+mean(ErrorAbs_theta);
+mode(ErrorAbs_theta);
+
+%TRIAD/TRAPEZIO (Phi) 
+for i=1:length(time)
+    if phi_trapz(i,1) ~= 0
+        ErrorAbs_phi(i) = norm(angle(i,2)-phi_trapz(i,1))/norm((phi_trapz(i,1)));
+    end
+end
+mean(ErrorAbs_phi);
+mode(ErrorAbs_phi);
+
+%TRIAD/TRAPEZIO (Psi) 
+for i=1:length(time)
+    if psi_trapz(i,1) ~= 0
+        ErrorAbs_psi(i) = norm(angle(i,3)-psi_trapz(i,1))/norm((psi_trapz(i,1)));
+    end
+end
+mean(ErrorAbs_psi);
+mode(ErrorAbs_psi);
+
+
+
+%Determinacao dos Erros absolutos - Trapézio - Referencia
+ErrorAbs_Qtheta = zeros(length(time),1);
+ErrorAbs_Qphi = zeros(length(time),1);
+ErrorAbs_Qpsi = zeros(length(time),1);
+%QUATERNIONS/TRAPEZIO (Theta) 
+for i=1:length(time)
+    if theta_trapz(i,1) ~= 0
+        ErrorAbs_Qtheta(i) = norm(qx(i,1)-theta_trapz(i,1))/norm((theta_trapz(i,1)));
+    end
+end
+mean(ErrorAbs_Qtheta);
+mode(ErrorAbs_Qtheta);
+
+%QUATERNIONS/TRAPEZIO (Phi) 
+for i=1:length(time)
+    if phi_trapz(i,1) ~= 0
+        ErrorAbs_Qphi(i) = norm(qy(i,1)-phi_trapz(i,1))/norm((phi_trapz(i,1)));
+    end
+end
+mean(ErrorAbs_Qphi);
+mode(ErrorAbs_Qphi);
+
+%QUATERNIONS/TRAPEZIO (Psi) 
+for i=1:length(time)
+    if psi_trapz(i,1) ~= 0
+        ErrorAbs_Qpsi(i) = norm(qz(i,1)-psi_trapz(i,1))/norm((psi_trapz(i,1)));
+    end
+end
+mean(ErrorAbs_Qpsi);
+mode(ErrorAbs_Qpsi);
+
+
+
+
