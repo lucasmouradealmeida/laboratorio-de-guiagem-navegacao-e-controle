@@ -1,5 +1,5 @@
 function [theta] = converter_anomalia_media_verdadeira(M , e)
-    % Determinacao do valor inicial
+    % Determinacao do valor inicial - anomalia excentrica
     if M < pi
         u0 = M + (e/2);
     else
