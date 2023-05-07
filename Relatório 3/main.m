@@ -1,10 +1,14 @@
 %Relatorio 3
+
+%Constantes
+
 M = 1.1; %kg
 g_lunar = 1.8; %m/s2
 E = 3.6; %N - empuxo jato
 theta = 0;
 theta1 = 30;
 theta2 = -30;
+
 %Condicoes de contorno
 
 %Movimento vertical
@@ -17,40 +21,40 @@ P = M*g_lunar;
 %Eixo x 
 ax = Fx/M;
 %Eixo y
-ay = (Fy + P)/M;
+ay = (Fy - P)/M;
 
-%Pouso suave: y = 0; vx e vy = 0 no pouso
-%2 - PFD
+%Pouso suave
 
-%Equacaoo Torricelli
-%v2 = v02 + 2aS
-%leva em consideracaoo as condicoes de contorno do pouso (y = 0; vy = 0)
-%a_pouso = (V0^2)/(2*y);
+% Final: y = 0; vx e vy = 0
+%Condições Iniciais
+y0 = 18;
+vy = -7;
 
+%Utilizando a equacao Torricelli
 y = 0:40;
+
+%Curvas de velocidade inicial
 V0 = - sqrt(((Fy - P)/M)*(2*y));
+
 V01 = - sqrt(((Fy1 - P)/M)*(2*y));
+
 V02 = - sqrt(((Fy2 - P)/M)*(2*y));
-vf1 = -sqrt((-7)^2 + 2*(((Fy - P)/M))*(y-18));
-vf2 = -sqrt((-7)^2 + 2*(((Fy1 - P)/M))*(y-18));
-
-% Fit the range fro 10 to 20 with a line.
-%limitedRange = 1:50;
-%V0t = polyfit(y(limitedRange), V0(limitedRange), 23);
-%V01t = polyfit(y(limitedRange), V01(limitedRange), 23);
-%V02t = polyfit(y(limitedRange), V02(limitedRange), 23);
-%Vf1t = polyfit(y(limitedRange), Vf1(limitedRange), 25);
-%Vf2t = polyfit(y(limitedRange), Vf2(limitedRange), 27);
 
 
-fun = @(y) - ((Fy - P)/M)*(2*y) + (-7)^2 + 2*(((Fy1 - P)/M))*(y-18);
-x = fzero(fun, 2);
-vo_value = - sqrt(((Fy - P)/M)*(2*x));
-t_transf =  (vo_value + 7)/(((Fy1 - P)/M));
-t_red = (0 - vo_value)/((Fy - P)/M);
-tempo_total = t_transf + t_red;
+%CUrvas de velocidade Final
+vf1 = -sqrt((vy)^2 + 2*(((Fy - P)/M))*(y-y0));
 
+vf2 = -sqrt((vy)^2 + 2*(((Fy1 - P)/M))*(y-y0));
 
+%Minimização do y para 0 -> Condição 1
+fun = @(y) - ((Fy - P)/M)*(2*y) + (vy)^2 + 2*(((Fy1 - P)/M))*(y-y0);
+x = fzero(fun, 2); %Altura de encontro entre as curvas
+vo_value = - sqrt(((Fy - P)/M)*(2*x)); %Velocidade no encontro entre as curvas
+t_transf =  (vo_value - vy)/(((Fy1 - P)/M)); %Tempo para transferencia
+t_red = (0 - vo_value)/((Fy - P)/M); %Tempo da curva para pouso
+tempo_total = t_transf + t_red; %Tempo total
+
+%Minimização para y para 0 -> Condição 2
 fun2 = @(y) ((-7)^2 + 2*(((Fy - P)/M))*(y-18)) - (((Fy2 - P)/M)*(2*y)) ;
 x2 = fzero(fun2, 2);
 vo_value2 = - sqrt(((Fy2 - P)/M)*(2*x2));
@@ -58,7 +62,8 @@ t_transf2 =  (vo_value2 + 7)/((Fy - P)/M);
 t_red2 = (0 - vo_value2)/((Fy2 - P)/M);
 tempo_total2 = t_transf2 + t_red2;
 
-%Primeira Condição
+
+%Primeira Condição -> Ocorre o ajuste para zerar a velocidade em X
 %Sx Sy Vx Vy
 InitCond = [0 18 0 -7];
 options = odeset('RelTol',1e-12); %minimizacao do erro 
@@ -72,7 +77,7 @@ InitCond3 = [OutX(len1, 1) OutX(len1, 2) OutX(len1, 3) OutX(len1, 4)];
 
 
 
-%Segunda Condição
+%Segunda Condição -> Ocorre o ajuste para zerar a velocidade em X
 %Sx Sy Vx Vy
 InitCond = [0 18 0 -7];
 options = odeset('RelTol',1e-12); %minimizacao do erro 
@@ -84,7 +89,7 @@ len3 = length(Out4);
 InitCond3 = [Out4(len3, 1) Out4(len3, 2) Out4(len3, 3) Out4(len3, 4)];
 [Times5,Out5] = ode45(@edosN30, [tempo_total2-1.48835 tempo_total2], InitCond3, options);
 
-
+%Plots
 figure(1)
 p1 = plot(V0, y, 'red'); %0
 hold on
@@ -99,14 +104,7 @@ h = [p1;p2;p3;p4;p5;p6];
 legend(h,'Pouso suave 0','Pouso suave 30', 'Pouso suave -30','Ponto inicial','Final 0', 'Final 30 ou -30');
 hold off
 
-%Para plotar as condições 1 e 2 somente comentar e descomentar utilizando %
-%Vetores Finais sem correção em X - Condição 1
-%x = [Out(:, 1); Out2(:,1)];
-%y = [Out(:, 2); Out2(:,2)];
-%Vx = [Out(:, 3); Out2(:,3)];
-%Vy = [Out(:, 4); Out2(:,4)];
-
-%Vetores Finais sem correção em X - Condição 2
+%Plots dos vetores finais -> Condiççao 2
 x = [Out3(:, 1); Out5(:,1)];
 y = [Out3(:, 2); Out5(:,2)];
 Vx = [Out3(:, 3); Out5(:,3)];
@@ -139,7 +137,7 @@ ylabel('Coordenadas em y')
 
 
 
-%% Massa Variável
+%% Massa Variável - Código Fornecido -> Atenção: contém erro na massa
 
 clear all
 clc

@@ -75,7 +75,6 @@ InitCond = [r v];
 %Solucoes ODE45 (Possivel modificar e multiplicar T (quantidade de periodos))
 options = odeset('RelTol',1e-12); %minimizacao do erro 
 
-%Item a:
 [Times,Out] = ode45(@edos, [0 50*T], InitCond, options);
 
 %Plot do grafico - Numérica

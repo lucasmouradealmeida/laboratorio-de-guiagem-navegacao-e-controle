@@ -37,8 +37,7 @@ ylim([-90,90])
 hold off
 
 
-
-%Integra??o por Trap?zio
+%Integracao por Trapezio
 gx = data(:, 7);
 gy = data(:,8);
 gz = data(:,9);
@@ -87,7 +86,7 @@ ylim([-90,90])
 hold off
 
 
-%teste interferencia 
+%Teste interferencia 
 %acelerometro
 figure(4)
 plot(time, data(:,1), 'red')
@@ -100,7 +99,7 @@ xlabel('Tempo [s]')
 ylabel('Gravidade da Terra [g]')
 hold off
 
-%magnetometro
+%Magnetometro
 figure(5)
 plot(time, data(:,4), 'red')
 hold on
@@ -112,7 +111,7 @@ xlabel('Tempo [s]')
 ylabel('Tesla [T]')
 hold off
 
-%giroscopio
+%Giroscopio
 figure(6)
 plot(time, data(:,7), 'red')
 hold on
